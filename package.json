@@ -1,13 +1,14 @@
 {
   "name": "kids-color-game",
   "private": true,
-  "version": "1.0.0",
+  "version": "1.0.1",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "release": "bash release.sh"
   },
   "dependencies": {
     "@tailwindcss/vite": "4.2.0",
