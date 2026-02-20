@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+* {
+  touch-action: manipulation;
+}
+
 button {
   cursor: pointer;
 }
