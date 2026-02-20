@@ -22,24 +22,28 @@ function App() {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-200 gap-8">
-      <div className="flex flex-wrap justify-center gap-8 sm:gap-20">
+      <h1 className="text-4xl sm:text-5xl font-bold text-gray-700 mb-20">משחקי פרידנטל</h1>
+      <div className="flex flex-wrap justify-start sm:justify-center gap-8 sm:gap-20 max-w-[26rem] sm:max-w-none">
         <button
           onClick={() => setScreen("math")}
-          className="w-32 h-32 sm:w-48 sm:h-48 rounded-2xl bg-blue-400 text-white text-xl sm:text-2xl font-bold shadow-lg hover:bg-blue-500 transition-colors"
+          className="w-48 h-48 rounded-2xl bg-blue-400 text-white text-2xl font-bold shadow-lg hover:bg-blue-500 transition-colors flex flex-col items-center justify-center gap-2"
         >
-          חשבון
+          <span className="text-6xl opacity-90">➕</span>
+          <span>חשבון</span>
         </button>
         <button
           onClick={() => setScreen("color")}
-          className="w-32 h-32 sm:w-48 sm:h-48 rounded-2xl bg-pink-400 text-white text-xl sm:text-2xl font-bold shadow-lg hover:bg-pink-500 transition-colors"
+          className="w-48 h-48 rounded-2xl bg-pink-400 text-white text-2xl font-bold shadow-lg hover:bg-pink-500 transition-colors flex flex-col items-center justify-center gap-2"
         >
-          צבעים
+          <span className="text-6xl opacity-90">🎨</span>
+          <span>צבעים</span>
         </button>
         <button
           onClick={() => setScreen("tictactoe")}
-          className="w-32 h-32 sm:w-48 sm:h-48 rounded-2xl bg-green-400 text-white text-xl sm:text-2xl font-bold shadow-lg hover:bg-green-500 transition-colors"
+          className="w-48 h-48 rounded-2xl bg-green-400 text-white text-2xl font-bold shadow-lg hover:bg-green-500 transition-colors flex flex-col items-center justify-center gap-2"
         >
-          איקס עיגול
+          <span className="text-6xl opacity-90">❌⭕</span>
+          <span>איקס עיגול</span>
         </button>
       </div>
     </div>
