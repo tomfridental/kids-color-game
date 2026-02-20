@@ -195,7 +195,7 @@ function TicTacToe({ onBack }: { onBack: () => void }) {
       </div>
 
       {/* Board */}
-      <div className="grid grid-cols-3 gap-2 sm:gap-3 mb-6 sm:mb-10">
+      <div className="grid grid-cols-3 gap-2 sm:gap-3 mb-6 sm:mb-10 w-[min(95vw,36rem)]">
         {board.map((cell, i) => {
           const isWinCell = winLine?.includes(i);
           return (
@@ -203,7 +203,7 @@ function TicTacToe({ onBack }: { onBack: () => void }) {
               key={i}
               onClick={() => handleCellClick(i)}
               disabled={!!cell || gameOver || locked}
-              className={`w-24 h-24 sm:w-32 sm:h-32 rounded-2xl text-5xl sm:text-7xl font-bold shadow-lg transition-all flex items-center justify-center ${
+              className={`aspect-square rounded-2xl text-[22vw] sm:text-9xl font-bold shadow-lg transition-all flex items-center justify-center ${
                 isWinCell
                   ? result === "win"
                     ? "bg-green-400 ring-4 ring-green-300 scale-105"
