@@ -10,9 +10,10 @@ const LEVELS: Word[][] = [
   // Level 1: 2-3 letter words
   [
     { emoji: "🐶", word: "כלב", en: "dog" },
-    { emoji: "🐱", word: "חתול", en: "cat" },
     { emoji: "🐟", word: "דג", en: "fish" },
     { emoji: "🌳", word: "עץ", en: "tree" },
+    { emoji: "🌈", word: "קשת", en: "rainbow" },
+    { emoji: "🐘", word: "פיל", en: "elephant" },
     { emoji: "🏠", word: "בית", en: "house" },
   ],
   // Level 2: 3-4 letter words
@@ -22,13 +23,14 @@ const LEVELS: Word[][] = [
     { emoji: "🌙", word: "ירח", en: "moon" },
     { emoji: "☀️", word: "שמש", en: "sun" },
     { emoji: "🍎", word: "תפוח", en: "apple" },
+    { emoji: "🐴", word: "סוס", en: "horse" },
   ],
   // Level 3: 4 letter words
   [
     { emoji: "🦋", word: "פרפר", en: "butterfly" },
     { emoji: "🍌", word: "בננה", en: "banana" },
-    { emoji: "🐘", word: "פיל", en: "elephant" },
     { emoji: "⭐", word: "כוכב", en: "star" },
+    { emoji: "🐱", word: "חתול", en: "cat" },
     { emoji: "🎈", word: "בלון", en: "balloon" },
   ],
   // Level 4: 4-5 letter words
@@ -36,8 +38,8 @@ const LEVELS: Word[][] = [
     { emoji: "🍉", word: "אבטיח", en: "watermelon" },
     { emoji: "🐢", word: "צב", en: "turtle" },
     { emoji: "🦁", word: "אריה", en: "lion" },
-    { emoji: "🌈", word: "קשת", en: "rainbow" },
     { emoji: "🎂", word: "עוגה", en: "cake" },
+    { emoji: "🔴", word: "אדום", en: "red" },
   ],
   // Level 5: mixed
   [
@@ -161,16 +163,13 @@ function HebrewLetters({ onBack }: { onBack: () => void }) {
   const currentWord = LEVELS[level][wordIndex];
   const letters = currentWord.word.split("");
 
-  const nextWord = useCallback(
-    (lvl: number, idx: number) => {
-      const w = LEVELS[lvl][idx];
-      setFilled([]);
-      setChoices(getLetterChoices(w.word));
-      setShakeWrong(false);
-      setWordComplete(false);
-    },
-    []
-  );
+  const nextWord = useCallback((lvl: number, idx: number) => {
+    const w = LEVELS[lvl][idx];
+    setFilled([]);
+    setChoices(getLetterChoices(w.word));
+    setShakeWrong(false);
+    setWordComplete(false);
+  }, []);
 
   const handleLetterClick = useCallback(
     (letter: string) => {
@@ -223,9 +222,7 @@ function HebrewLetters({ onBack }: { onBack: () => void }) {
         <h1 className="text-3xl sm:text-4xl font-bold text-green-600">
           !כל הכבוד
         </h1>
-        <p className="text-xl sm:text-2xl text-gray-600">
-          סיימת את כל השלבים
-        </p>
+        <p className="text-xl sm:text-2xl text-gray-600">סיימת את כל השלבים</p>
         <button
           onClick={() => {
             setLevel(0);
@@ -260,9 +257,7 @@ function HebrewLetters({ onBack }: { onBack: () => void }) {
         >
           → חזרה
         </button>
-        <h1 className="text-xl sm:text-2xl font-bold text-gray-700">
-          אותיות
-        </h1>
+        <h1 className="text-xl sm:text-2xl font-bold text-gray-700">אותיות</h1>
       </div>
 
       {/* Level indicators */}
@@ -282,8 +277,8 @@ function HebrewLetters({ onBack }: { onBack: () => void }) {
                 isDone
                   ? "bg-green-400 text-white hover:bg-green-500"
                   : isActive
-                    ? "bg-blue-400 text-white scale-110"
-                    : "bg-gray-300 text-gray-500 hover:bg-gray-400 hover:text-white"
+                  ? "bg-blue-400 text-white scale-110"
+                  : "bg-gray-300 text-gray-500 hover:bg-gray-400 hover:text-white"
               }`}
             >
               {i + 1}
@@ -301,8 +296,8 @@ function HebrewLetters({ onBack }: { onBack: () => void }) {
               i < wordIndex
                 ? "bg-green-400"
                 : i === wordIndex
-                  ? "bg-blue-400"
-                  : "bg-gray-300"
+                ? "bg-blue-400"
+                : "bg-gray-300"
             }`}
           />
         ))}
@@ -318,10 +313,12 @@ function HebrewLetters({ onBack }: { onBack: () => void }) {
 
       {/* Letter blanks */}
       <div
-        className={`flex gap-3 sm:gap-4 mb-8 sm:mb-10 ${shakeWrong ? "animate-shake" : ""}`}
+        className={`flex gap-3 sm:gap-4 mb-8 sm:mb-10 ${
+          shakeWrong ? "animate-shake" : ""
+        }`}
         dir="rtl"
       >
-        {letters.map((letter, i) => {
+        {letters.map((_, i) => {
           const isFilled = i < filled.length;
           return (
             <div
@@ -344,7 +341,9 @@ function HebrewLetters({ onBack }: { onBack: () => void }) {
       <div
         className="grid gap-3 sm:gap-4 w-full"
         style={{
-          gridTemplateColumns: `repeat(${Math.ceil(choices.length / 2)}, minmax(0, 1fr))`,
+          gridTemplateColumns: `repeat(${Math.ceil(
+            choices.length / 2
+          )}, minmax(0, 1fr))`,
           maxWidth: `${Math.ceil(choices.length / 2) * 7}rem`,
         }}
       >
