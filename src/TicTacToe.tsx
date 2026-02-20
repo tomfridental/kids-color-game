@@ -203,7 +203,7 @@ function TicTacToe({ onBack }: { onBack: () => void }) {
               key={i}
               onClick={() => handleCellClick(i)}
               disabled={!!cell || gameOver || locked}
-              className={`aspect-square rounded-2xl text-[22vw] sm:text-9xl font-bold shadow-lg transition-all flex items-center justify-center ${
+              className={`aspect-square rounded-2xl text-[18vw] sm:text-9xl font-bold shadow-lg transition-all flex items-center justify-center overflow-hidden leading-none ${
                 isWinCell
                   ? result === "win"
                     ? "bg-green-400 ring-4 ring-green-300 scale-105"

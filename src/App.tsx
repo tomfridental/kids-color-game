@@ -31,8 +31,10 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-200 p-4 sm:p-8">
-      <h1 className="text-3xl sm:text-5xl font-bold text-gray-700 mb-6 sm:mb-20">משחקי פרידנטל</h1>
+    <div className="flex flex-col items-center bg-gray-200 px-4 pt-2 pb-4 sm:p-8 justify-center" style={{ minHeight: "100dvh" }}>
+      <h1 className="text-3xl sm:text-5xl font-bold text-gray-700 mb-6 sm:mb-20">
+        משחקי פרידנטל
+      </h1>
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 sm:gap-8 w-full max-w-md sm:max-w-2xl">
         <button
           onClick={() => setScreen("math")}
