@@ -24,7 +24,7 @@ const ALL_COLORS: ColorDef[] = [
   { name: "Light Blue", bg: "bg-[lightblue]", hover: "hover:bg-[#87cefa]" },
 ];
 
-function getColorPool(_level: number): ColorDef[] {
+function getColorPool(): ColorDef[] {
   return ALL_COLORS;
 }
 
@@ -33,8 +33,8 @@ interface Round {
   options: ColorDef[];
 }
 
-function generateRound(level: number): Round {
-  const pool = getColorPool(level);
+function generateRound(): Round {
+  const pool = getColorPool();
   const shuffled = shuffle(pool);
   const options = shuffled.slice(0, 4);
   const correctColor = options[Math.floor(Math.random() * 4)];
@@ -93,7 +93,7 @@ function playSound(type: "correct" | "wrong") {
 function ColorGame({ onBack }: { onBack: () => void }) {
   const [level, setLevel] = useState(1);
   const [correctCount, setCorrectCount] = useState(0);
-  const [round, setRound] = useState<Round>(() => generateRound(1));
+  const [round, setRound] = useState<Round>(() => generateRound());
   const [selectedOption, setSelectedOption] = useState<ColorDef | null>(null);
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
   const [completed, setCompleted] = useState(false);
@@ -102,8 +102,8 @@ function ColorGame({ onBack }: { onBack: () => void }) {
     speakColor(round.correctColor.name);
   }, [round]);
 
-  const nextRound = useCallback((lvl: number) => {
-    const r = generateRound(lvl);
+  const nextRound = useCallback(() => {
+    const r = generateRound();
     setRound(r);
     setSelectedOption(null);
     setIsCorrect(null);
@@ -129,11 +129,11 @@ function ColorGame({ onBack }: { onBack: () => void }) {
               const nextLevel = level + 1;
               setLevel(nextLevel);
               setCorrectCount(0);
-              nextRound(nextLevel);
+              nextRound();
             }
           } else {
             setCorrectCount(newCount);
-            nextRound(level);
+            nextRound();
           }
         }, 1000);
       } else {
@@ -159,7 +159,7 @@ function ColorGame({ onBack }: { onBack: () => void }) {
             setLevel(1);
             setCorrectCount(0);
             setCompleted(false);
-            nextRound(1);
+            nextRound();
           }}
           className="px-6 py-3 sm:px-8 sm:py-4 rounded-2xl bg-pink-400 text-white text-lg sm:text-xl font-bold shadow-lg hover:bg-pink-500 transition-colors"
         >
@@ -205,7 +205,7 @@ function ColorGame({ onBack }: { onBack: () => void }) {
               onClick={() => {
                 setLevel(lvl);
                 setCorrectCount(0);
-                nextRound(lvl);
+                nextRound();
               }}
               className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center text-xs sm:text-sm font-bold transition-all ${
                 isDone
