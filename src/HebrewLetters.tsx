@@ -2,49 +2,50 @@ import { useState, useCallback } from "react";
 
 interface Word {
   emoji: string;
-  word: string; // Hebrew word (RTL)
+  word: string;
+  en: string;
 }
 
 const LEVELS: Word[][] = [
   // Level 1: 2-3 letter words
   [
-    { emoji: "🐶", word: "כלב" },
-    { emoji: "🐱", word: "חתול" },
-    { emoji: "🐟", word: "דג" },
-    { emoji: "🌳", word: "עץ" },
-    { emoji: "🏠", word: "בית" },
+    { emoji: "🐶", word: "כלב", en: "dog" },
+    { emoji: "🐱", word: "חתול", en: "cat" },
+    { emoji: "🐟", word: "דג", en: "fish" },
+    { emoji: "🌳", word: "עץ", en: "tree" },
+    { emoji: "🏠", word: "בית", en: "house" },
   ],
   // Level 2: 3-4 letter words
   [
-    { emoji: "🌸", word: "פרח" },
-    { emoji: "📖", word: "ספר" },
-    { emoji: "🌙", word: "ירח" },
-    { emoji: "☀️", word: "שמש" },
-    { emoji: "🍎", word: "תפוח" },
+    { emoji: "🌸", word: "פרח", en: "flower" },
+    { emoji: "📖", word: "ספר", en: "book" },
+    { emoji: "🌙", word: "ירח", en: "moon" },
+    { emoji: "☀️", word: "שמש", en: "sun" },
+    { emoji: "🍎", word: "תפוח", en: "apple" },
   ],
   // Level 3: 4 letter words
   [
-    { emoji: "🦋", word: "פרפר" },
-    { emoji: "🍌", word: "בננה" },
-    { emoji: "🐘", word: "פיל" },
-    { emoji: "⭐", word: "כוכב" },
-    { emoji: "🎈", word: "בלון" },
+    { emoji: "🦋", word: "פרפר", en: "butterfly" },
+    { emoji: "🍌", word: "בננה", en: "banana" },
+    { emoji: "🐘", word: "פיל", en: "elephant" },
+    { emoji: "⭐", word: "כוכב", en: "star" },
+    { emoji: "🎈", word: "בלון", en: "balloon" },
   ],
   // Level 4: 4-5 letter words
   [
-    { emoji: "🍉", word: "אבטיח" },
-    { emoji: "🐢", word: "צב" },
-    { emoji: "🦁", word: "אריה" },
-    { emoji: "🌈", word: "קשת" },
-    { emoji: "🎂", word: "עוגה" },
+    { emoji: "🍉", word: "אבטיח", en: "watermelon" },
+    { emoji: "🐢", word: "צב", en: "turtle" },
+    { emoji: "🦁", word: "אריה", en: "lion" },
+    { emoji: "🌈", word: "קשת", en: "rainbow" },
+    { emoji: "🎂", word: "עוגה", en: "cake" },
   ],
   // Level 5: mixed
   [
-    { emoji: "🚗", word: "מכונית" },
-    { emoji: "✈️", word: "מטוס" },
-    { emoji: "🍦", word: "גלידה" },
-    { emoji: "🐓", word: "תרנגול" },
-    { emoji: "🌻", word: "חמנייה" },
+    { emoji: "🚗", word: "מכונית", en: "car" },
+    { emoji: "✈️", word: "מטוס", en: "airplane" },
+    { emoji: "🍦", word: "גלידה", en: "ice cream" },
+    { emoji: "🐓", word: "תרנגול", en: "rooster" },
+    { emoji: "🌻", word: "חמנייה", en: "sunflower" },
   ],
 ];
 
@@ -77,6 +78,26 @@ function getLetterChoices(word: string): string[] {
   }
 
   return shuffle([...wordLetters, ...extras]);
+}
+
+function speakEnglish(word: string) {
+  if (!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  const utterance = new SpeechSynthesisUtterance(word);
+  utterance.lang = "en-US";
+  utterance.rate = 0.8;
+  utterance.pitch = 1.1;
+  window.speechSynthesis.speak(utterance);
+}
+
+function speakLetter(letter: string) {
+  if (!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  const utterance = new SpeechSynthesisUtterance(letter);
+  utterance.lang = "he-IL";
+  utterance.rate = 0.7;
+  utterance.pitch = 1.1;
+  window.speechSynthesis.speak(utterance);
 }
 
 function playSound(type: "correct" | "wrong" | "place" | "win") {
@@ -287,10 +308,13 @@ function HebrewLetters({ onBack }: { onBack: () => void }) {
         ))}
       </div>
 
-      {/* Emoji image */}
-      <div className="text-8xl sm:text-9xl mb-6 sm:mb-8">
+      {/* Emoji image — easter egg: tap to hear in English */}
+      <button
+        onClick={() => speakEnglish(currentWord.en)}
+        className="text-8xl sm:text-9xl mb-6 sm:mb-8"
+      >
         {currentWord.emoji}
-      </div>
+      </button>
 
       {/* Letter blanks */}
       <div
@@ -321,18 +345,25 @@ function HebrewLetters({ onBack }: { onBack: () => void }) {
         className="grid gap-3 sm:gap-4 w-full"
         style={{
           gridTemplateColumns: `repeat(${Math.ceil(choices.length / 2)}, minmax(0, 1fr))`,
-          maxWidth: `${Math.ceil(choices.length / 2) * 5}rem`,
+          maxWidth: `${Math.ceil(choices.length / 2) * 7}rem`,
         }}
       >
         {choices.map((letter, i) => (
-          <button
-            key={i}
-            onClick={() => handleLetterClick(letter)}
-            disabled={wordComplete}
-            className="aspect-square rounded-2xl bg-orange-400 hover:bg-orange-500 text-white text-4xl sm:text-5xl font-bold shadow-lg transition-all hover:scale-110 disabled:opacity-60 disabled:hover:scale-100"
-          >
-            {letter}
-          </button>
+          <div key={i} className="flex items-center gap-1 sm:gap-2">
+            <button
+              onClick={() => speakLetter(letter)}
+              className="text-lg sm:text-xl opacity-50 hover:opacity-100 transition-opacity shrink-0"
+            >
+              🔊
+            </button>
+            <button
+              onClick={() => handleLetterClick(letter)}
+              disabled={wordComplete}
+              className="aspect-square flex-1 rounded-2xl bg-orange-400 hover:bg-orange-500 text-white text-4xl sm:text-5xl font-bold shadow-lg transition-all hover:scale-110 disabled:opacity-60 disabled:hover:scale-100"
+            >
+              {letter}
+            </button>
+          </div>
         ))}
       </div>
     </div>
