@@ -173,7 +173,7 @@ function TicTacToe({ onBack }: { onBack: () => void }) {
   );
 
   return (
-    <div className="min-h-screen flex flex-col items-center bg-gray-200 p-4 sm:p-8" dir="rtl">
+    <div className="h-dvh overflow-hidden flex flex-col items-center bg-gray-200 p-4 sm:p-8" dir="rtl">
       {/* Header */}
       <div className="w-full max-w-lg relative flex items-center justify-center mb-4 sm:mb-8">
         <button

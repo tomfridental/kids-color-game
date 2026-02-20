@@ -31,7 +31,7 @@ function App() {
   }
 
   return (
-    <div className="flex flex-col items-center bg-gray-200 px-4 pt-2 pb-4 sm:p-8 justify-center" style={{ minHeight: "100dvh" }}>
+    <div className="flex flex-col items-center bg-gray-200 px-4 pt-2 pb-4 sm:p-8 justify-center" style={{ height: "100dvh" }}>
       <h1 className="text-3xl sm:text-5xl font-bold text-gray-700 mb-6 sm:mb-20">
         משחקי פרידנטל
       </h1>

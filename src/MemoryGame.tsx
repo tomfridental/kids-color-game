@@ -174,7 +174,7 @@ function MemoryGame({ onBack }: { onBack: () => void }) {
   if (completed) {
     const isLastLevel = level >= LEVELS.length - 1;
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-gray-200 gap-6 p-4">
+      <div className="h-dvh overflow-hidden flex flex-col items-center justify-center bg-gray-200 gap-6 p-4">
         <div className="text-5xl sm:text-6xl">🎉</div>
         <h1 className="text-3xl sm:text-4xl font-bold text-green-600">!כל הכבוד</h1>
         <p className="text-xl sm:text-2xl text-gray-600">
@@ -205,7 +205,7 @@ function MemoryGame({ onBack }: { onBack: () => void }) {
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center bg-gray-200 p-4 sm:p-8" dir="rtl">
+    <div className="h-dvh overflow-hidden flex flex-col items-center bg-gray-200 p-4 sm:p-8" dir="rtl">
       {/* Header */}
       <div className="w-full max-w-lg relative flex items-center justify-center mb-4 sm:mb-8">
         <button

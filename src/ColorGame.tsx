@@ -148,7 +148,7 @@ function ColorGame({ onBack }: { onBack: () => void }) {
 
   if (completed) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-gray-200 gap-6 sm:gap-8 p-4">
+      <div className="h-dvh overflow-hidden flex flex-col items-center justify-center bg-gray-200 gap-6 sm:gap-8 p-4">
         <div className="text-5xl sm:text-6xl">🎉</div>
         <h1 className="text-3xl sm:text-4xl font-bold text-green-600">
           !כל הכבוד
@@ -177,7 +177,7 @@ function ColorGame({ onBack }: { onBack: () => void }) {
 
   return (
     <div
-      className="min-h-screen flex flex-col items-center bg-gray-200 p-4 sm:p-8"
+      className="h-dvh overflow-hidden flex flex-col items-center bg-gray-200 p-4 sm:p-8"
       dir="rtl"
     >
       {/* Header */}
