@@ -10,35 +10,45 @@ interface Problem {
   answer: number;
 }
 
-function generateProblem(): Problem {
-  const operator = Math.random() < 0.5 ? "+" : "-";
-  let a: number, b: number, answer: number;
-
-  if (operator === "+") {
-    answer = Math.floor(Math.random() * 11); // 0-10
-    a = Math.floor(Math.random() * (answer + 1));
-    b = answer - a;
-  } else {
-    a = Math.floor(Math.random() * 11); // 0-10
-    b = Math.floor(Math.random() * (a + 1));
-    answer = a - b;
-  }
-
-  return { a, b, operator, answer };
+function getLevelConfig(level: number) {
+  if (level <= 3) return { maxSum: 5, minAnswer: 0, minOperand: 0, allowSubtract: false };
+  if (level <= 8) return { maxSum: 10, minAnswer: 0, minOperand: 0, allowSubtract: false };
+  if (level <= 15) return { maxSum: 10, minAnswer: 0, minOperand: 0, allowSubtract: true };
+  return { maxSum: 20, minAnswer: 11, minOperand: 2, allowSubtract: false };
 }
 
-function generateOptions(correctAnswer: number): number[] {
+function generateProblem(level: number): Problem {
+  const { maxSum, minAnswer, minOperand, allowSubtract } = getLevelConfig(level);
+  const operator = allowSubtract && Math.random() < 0.5 ? "-" : "+";
+
+  // 95% chance to use at least 1 (rarely allows 0)
+  const effectiveMin = minOperand === 0 && Math.random() < 0.95 ? 1 : minOperand;
+
+  if (operator === "+") {
+    const a = effectiveMin + Math.floor(Math.random() * (maxSum - effectiveMin + 1));
+    const bMin = Math.max(effectiveMin, minAnswer - a);
+    const bMax = maxSum - a;
+    if (bMin > bMax) return generateProblem(level);
+    const b = bMin + Math.floor(Math.random() * (bMax - bMin + 1));
+    return { a, b, operator, answer: a + b };
+  } else {
+    const a = effectiveMin + Math.floor(Math.random() * (maxSum - effectiveMin + 1));
+    const b = effectiveMin + Math.floor(Math.random() * (a - effectiveMin + 1));
+    return { a, b, operator, answer: a - b };
+  }
+}
+
+function generateOptions(correctAnswer: number, maxSum: number): number[] {
   const options = new Set<number>([correctAnswer]);
 
   while (options.size < 4) {
-    // Generate plausible wrong answers near the correct one
     const offset = Math.floor(Math.random() * 5) + 1;
     const wrong =
       Math.random() < 0.5
         ? correctAnswer + offset
         : correctAnswer - offset;
 
-    if (wrong >= 0 && wrong <= 10) {
+    if (wrong >= 0 && wrong <= maxSum) {
       options.add(wrong);
     }
   }
@@ -82,6 +92,10 @@ function playSound(type: "correct" | "wrong") {
   }
 }
 
+function getMaxSum(level: number): number {
+  return getLevelConfig(level).maxSum;
+}
+
 const OPTION_COLORS = [
   { bg: "bg-blue-400", hover: "hover:bg-blue-500" },
   { bg: "bg-pink-400", hover: "hover:bg-pink-500" },
@@ -92,27 +106,19 @@ const OPTION_COLORS = [
 function MathGame({ onBack }: { onBack: () => void }) {
   const [level, setLevel] = useState(1);
   const [correctCount, setCorrectCount] = useState(0);
-  const [problem, setProblem] = useState<Problem>(generateProblem);
-  const [options, setOptions] = useState<number[]>(() =>
-    generateOptions(generateProblem().answer)
-  );
+  const [problem, setProblem] = useState<Problem>(() => generateProblem(1));
+  const [options, setOptions] = useState<number[]>(() => {
+    const p = generateProblem(1);
+    return generateOptions(p.answer, getMaxSum(1));
+  });
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
   const [completed, setCompleted] = useState(false);
 
-  // Initialize options from problem on first render
-  const [initialized, setInitialized] = useState(false);
-  if (!initialized) {
-    const p = generateProblem();
+  const nextProblem = useCallback((lvl: number) => {
+    const p = generateProblem(lvl);
     setProblem(p);
-    setOptions(generateOptions(p.answer));
-    setInitialized(true);
-  }
-
-  const nextProblem = useCallback(() => {
-    const p = generateProblem();
-    setProblem(p);
-    setOptions(generateOptions(p.answer));
+    setOptions(generateOptions(p.answer, getMaxSum(lvl)));
     setSelectedOption(null);
     setIsCorrect(null);
   }, []);
@@ -134,13 +140,14 @@ function MathGame({ onBack }: { onBack: () => void }) {
             if (level >= LEVELS) {
               setCompleted(true);
             } else {
-              setLevel((l) => l + 1);
+              const nextLevel = level + 1;
+              setLevel(nextLevel);
               setCorrectCount(0);
-              nextProblem();
+              nextProblem(nextLevel);
             }
           } else {
             setCorrectCount(newCount);
-            nextProblem();
+            nextProblem(level);
           }
         }, 1000);
       } else {
@@ -164,7 +171,7 @@ function MathGame({ onBack }: { onBack: () => void }) {
             setLevel(1);
             setCorrectCount(0);
             setCompleted(false);
-            nextProblem();
+            nextProblem(1);
           }}
           className="px-6 py-3 sm:px-8 sm:py-4 rounded-2xl bg-blue-400 text-white text-lg sm:text-xl font-bold shadow-lg hover:bg-blue-500 transition-colors"
         >
@@ -205,7 +212,7 @@ function MathGame({ onBack }: { onBack: () => void }) {
               onClick={() => {
                 setLevel(lvl);
                 setCorrectCount(0);
-                nextProblem();
+                nextProblem(lvl);
               }}
               className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center text-xs sm:text-sm font-bold transition-all ${
                 isDone
