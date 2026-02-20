@@ -2,8 +2,9 @@ import { useState } from "react";
 import MathGame from "./Math";
 import ColorGame from "./ColorGame";
 import TicTacToe from "./TicTacToe";
+import MemoryGame from "./MemoryGame";
 
-type Screen = "home" | "math" | "color" | "tictactoe";
+type Screen = "home" | "math" | "color" | "tictactoe" | "memory";
 
 function App() {
   const [screen, setScreen] = useState<Screen>("home");
@@ -18,6 +19,10 @@ function App() {
 
   if (screen === "tictactoe") {
     return <TicTacToe onBack={() => setScreen("home")} />;
+  }
+
+  if (screen === "memory") {
+    return <MemoryGame onBack={() => setScreen("home")} />;
   }
 
   return (
@@ -44,6 +49,13 @@ function App() {
         >
           <span className="text-6xl opacity-90">❌⭕</span>
           <span>איקס עיגול</span>
+        </button>
+        <button
+          onClick={() => setScreen("memory")}
+          className="w-48 h-48 rounded-2xl bg-purple-400 text-white text-2xl font-bold shadow-lg hover:bg-purple-500 transition-colors flex flex-col items-center justify-center gap-2"
+        >
+          <span className="text-6xl opacity-90">🧠</span>
+          <span>זיכרון</span>
         </button>
       </div>
     </div>
