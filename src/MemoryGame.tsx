@@ -247,14 +247,17 @@ function MemoryGame({ onBack }: { onBack: () => void }) {
 
       {/* Card grid */}
       <div
-        className="grid gap-2 sm:gap-3"
-        style={{ gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))` }}
+        className="grid gap-2 sm:gap-3 w-full"
+        style={{
+          gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))`,
+          maxWidth: `${cols * 9 + (cols - 1) * 0.75}rem`,
+        }}
       >
         {cards.map((card) => (
           <button
             key={card.id}
             onClick={() => handleCardClick(card.id)}
-            className={`w-16 h-16 sm:w-24 sm:h-24 rounded-xl text-3xl sm:text-5xl font-bold shadow-lg transition-all duration-300 flex items-center justify-center ${
+            className={`aspect-square rounded-xl text-4xl sm:text-5xl font-bold shadow-lg transition-all duration-300 flex items-center justify-center ${
               card.matched
                 ? "bg-green-300 scale-95 opacity-70"
                 : card.flipped
