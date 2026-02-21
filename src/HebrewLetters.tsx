@@ -288,7 +288,7 @@ function HebrewLetters({ onBack }: { onBack: () => void }) {
       </div>
 
       {/* Progress dots */}
-      <div className="flex gap-2 mb-6 sm:mb-8">
+      <div className="flex gap-2 mb-4">
         {LEVELS[level].map((_, i) => (
           <div
             key={i}
@@ -303,67 +303,70 @@ function HebrewLetters({ onBack }: { onBack: () => void }) {
         ))}
       </div>
 
-      {/* Emoji image — easter egg: tap to hear in English */}
-      <button
-        onClick={() => speakEnglish(currentWord.en)}
-        className="text-8xl sm:text-9xl mb-6 sm:mb-8"
-      >
-        {currentWord.emoji}
-      </button>
+      {/* Main content area - fills remaining space */}
+      <div className="flex-1 flex flex-col items-center justify-center w-full gap-4 sm:gap-6">
+        {/* Emoji image — easter egg: tap to hear in English */}
+        <button
+          onClick={() => speakEnglish(currentWord.en)}
+          className="text-7xl sm:text-8xl"
+        >
+          {currentWord.emoji}
+        </button>
 
-      {/* Letter blanks */}
-      <div
-        className={`flex gap-3 sm:gap-4 mb-8 sm:mb-10 ${
-          shakeWrong ? "animate-shake" : ""
-        }`}
-        dir="rtl"
-      >
-        {letters.map((_, i) => {
-          const isFilled = i < filled.length;
-          return (
-            <div
-              key={i}
-              className={`w-12 h-14 sm:w-20 sm:h-22 flex items-center justify-center text-3xl sm:text-5xl font-bold border-b-4 transition-all ${
-                isFilled
-                  ? wordComplete
-                    ? "border-green-400 text-green-600 scale-110"
-                    : "border-blue-400 text-gray-800"
-                  : "border-gray-400"
-              }`}
-            >
-              {isFilled ? filled[i] : ""}
+        {/* Letter blanks */}
+        <div
+          className={`flex gap-3 sm:gap-4 ${
+            shakeWrong ? "animate-shake" : ""
+          }`}
+          dir="rtl"
+        >
+          {letters.map((_, i) => {
+            const isFilled = i < filled.length;
+            return (
+              <div
+                key={i}
+                className={`w-12 h-14 sm:w-16 sm:h-18 flex items-center justify-center text-3xl sm:text-4xl font-bold border-b-4 transition-all ${
+                  isFilled
+                    ? wordComplete
+                      ? "border-green-400 text-green-600 scale-110"
+                      : "border-blue-400 text-gray-800"
+                    : "border-gray-400"
+                }`}
+              >
+                {isFilled ? filled[i] : ""}
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Letter choices */}
+        <div
+          className="grid gap-2 sm:gap-3 w-full"
+          style={{
+            gridTemplateColumns: `repeat(${Math.ceil(
+              choices.length / 2
+            )}, minmax(0, 1fr))`,
+            maxWidth: `${Math.ceil(choices.length / 2) * 6}rem`,
+          }}
+        >
+          {choices.map((letter, i) => (
+            <div key={i} className="flex items-center gap-1">
+              <button
+                onClick={() => speakLetter(letter)}
+                className="text-base sm:text-lg opacity-50 hover:opacity-100 transition-opacity shrink-0"
+              >
+                🔊
+              </button>
+              <button
+                onClick={() => handleLetterClick(letter)}
+                disabled={wordComplete}
+                className="aspect-square flex-1 rounded-2xl bg-orange-400 hover:bg-orange-500 text-white text-3xl sm:text-4xl font-bold shadow-lg transition-all hover:scale-110 disabled:opacity-60 disabled:hover:scale-100"
+              >
+                {letter}
+              </button>
             </div>
-          );
-        })}
-      </div>
-
-      {/* Letter choices */}
-      <div
-        className="grid gap-3 sm:gap-4 w-full"
-        style={{
-          gridTemplateColumns: `repeat(${Math.ceil(
-            choices.length / 2
-          )}, minmax(0, 1fr))`,
-          maxWidth: `${Math.ceil(choices.length / 2) * 7}rem`,
-        }}
-      >
-        {choices.map((letter, i) => (
-          <div key={i} className="flex items-center gap-1 sm:gap-2">
-            <button
-              onClick={() => speakLetter(letter)}
-              className="text-lg sm:text-xl opacity-50 hover:opacity-100 transition-opacity shrink-0"
-            >
-              🔊
-            </button>
-            <button
-              onClick={() => handleLetterClick(letter)}
-              disabled={wordComplete}
-              className="aspect-square flex-1 rounded-2xl bg-orange-400 hover:bg-orange-500 text-white text-4xl sm:text-5xl font-bold shadow-lg transition-all hover:scale-110 disabled:opacity-60 disabled:hover:scale-100"
-            >
-              {letter}
-            </button>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </div>
   );

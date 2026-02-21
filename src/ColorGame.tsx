@@ -194,7 +194,7 @@ function ColorGame({ onBack }: { onBack: () => void }) {
       </div>
 
       {/* Level indicators */}
-      <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-6 sm:mb-12 max-w-sm sm:max-w-lg">
+      <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-4 sm:mb-6 max-w-sm sm:max-w-lg">
         {Array.from({ length: LEVELS }, (_, i) => {
           const lvl = i + 1;
           const isActive = lvl === level;
@@ -222,7 +222,7 @@ function ColorGame({ onBack }: { onBack: () => void }) {
       </div>
 
       {/* Progress within level */}
-      <div className="flex gap-2 mb-4 sm:mb-8">
+      <div className="flex gap-2 mb-4">
         {Array.from({ length: PROBLEMS_PER_LEVEL }, (_, i) => (
           <div
             key={i}
@@ -233,41 +233,44 @@ function ColorGame({ onBack }: { onBack: () => void }) {
         ))}
       </div>
 
-      {/* Speaker button */}
-      <button
-        onClick={() => speakColor(round.correctColor.name)}
-        className="bg-white rounded-3xl shadow-lg px-12 py-8 sm:px-16 sm:py-10 mb-8 sm:mb-12 hover:shadow-xl transition-shadow"
-      >
-        <span className="text-6xl sm:text-7xl">🔊</span>
-        {!window.speechSynthesis && (
-          <p className="text-2xl font-bold text-gray-800 mt-2">
-            {round.correctColor.name}
-          </p>
-        )}
-      </button>
+      {/* Main content area - fills remaining space */}
+      <div className="flex-1 flex flex-col items-center justify-center w-full max-w-2xl gap-6 sm:gap-8">
+        {/* Speaker button */}
+        <button
+          onClick={() => speakColor(round.correctColor.name)}
+          className="bg-white rounded-3xl shadow-lg px-12 py-6 sm:px-16 sm:py-8 hover:shadow-xl transition-shadow"
+        >
+          <span className="text-6xl sm:text-7xl">🔊</span>
+          {!window.speechSynthesis && (
+            <p className="text-2xl font-bold text-gray-800 mt-2">
+              {round.correctColor.name}
+            </p>
+          )}
+        </button>
 
-      {/* Color options */}
-      <div className="grid grid-cols-2 gap-4 sm:gap-6">
-        {round.options.map((color, i) => {
-          let extraClass = "";
+        {/* Color options - single row */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 w-full max-w-lg">
+          {round.options.map((color, i) => {
+            let extraClass = "";
 
-          if (selectedOption !== null) {
-            if (isCorrect && color.name === round.correctColor.name) {
-              extraClass = "ring-4 ring-green-300 scale-110";
-            } else if (color.name === selectedOption.name && !isCorrect) {
-              extraClass = "ring-4 ring-red-300 animate-shake";
+            if (selectedOption !== null) {
+              if (isCorrect && color.name === round.correctColor.name) {
+                extraClass = "ring-4 ring-green-300 scale-110";
+              } else if (color.name === selectedOption.name && !isCorrect) {
+                extraClass = "ring-4 ring-red-300 animate-shake";
+              }
             }
-          }
 
-          return (
-            <button
-              key={i}
-              onClick={() => handleAnswer(color)}
-              disabled={selectedOption !== null}
-              className={`w-36 h-36 rounded-2xl shadow-lg transition-all ${color.bg} ${color.hover} ${extraClass} disabled:opacity-80`}
-            />
-          );
-        })}
+            return (
+              <button
+                key={i}
+                onClick={() => handleAnswer(color)}
+                disabled={selectedOption !== null}
+                className={`aspect-square rounded-2xl shadow-lg transition-all ${color.bg} ${color.hover} ${extraClass} disabled:opacity-80`}
+              />
+            );
+          })}
+        </div>
       </div>
     </div>
   );

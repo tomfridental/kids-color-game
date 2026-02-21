@@ -188,71 +188,74 @@ function TicTacToe({ onBack }: { onBack: () => void }) {
       </div>
 
       {/* Score */}
-      <div className="flex gap-6 sm:gap-10 mb-6 sm:mb-10 text-base sm:text-lg font-bold">
+      <div className="flex gap-6 sm:gap-10 mb-4 sm:mb-6 text-base sm:text-lg font-bold">
         <span className="text-green-600">ניצחונות: {score.wins}</span>
         <span className="text-gray-500">תיקו: {score.draws}</span>
         <span className="text-red-500">הפסדים: {score.losses}</span>
       </div>
 
-      {/* Board */}
-      <div className="grid grid-cols-3 gap-2 sm:gap-3 mb-6 sm:mb-10 w-[min(95vw,36rem)]">
-        {board.map((cell, i) => {
-          const isWinCell = winLine?.includes(i);
-          return (
-            <button
-              key={i}
-              onClick={() => handleCellClick(i)}
-              disabled={!!cell || gameOver || locked}
-              className={`aspect-square rounded-2xl text-[18vw] sm:text-9xl font-bold shadow-lg transition-all flex items-center justify-center overflow-hidden leading-none ${
-                isWinCell
-                  ? result === "win"
-                    ? "bg-green-400 ring-4 ring-green-300 scale-105"
-                    : "bg-red-400 ring-4 ring-red-300 scale-105"
-                  : cell
-                    ? "bg-white"
-                    : "bg-white hover:bg-gray-100 hover:scale-105"
-              } disabled:cursor-default`}
-            >
-              {cell === "X" && (
-                <span className="text-blue-500">X</span>
-              )}
-              {cell === "O" && (
-                <span className="text-pink-500">O</span>
-              )}
-            </button>
-          );
-        })}
-      </div>
-
-      {/* Game result */}
-      {gameOver && (
-        <div className="flex flex-col items-center gap-4 sm:gap-6">
-          <div className="text-3xl sm:text-4xl font-bold">
-            {result === "win" && (
-              <span className="text-green-600">🎉 ניצחת!</span>
-            )}
-            {result === "lose" && (
-              <span className="text-red-500">😢 הפסדת</span>
-            )}
-            {result === "draw" && (
-              <span className="text-gray-600">🤝 תיקו!</span>
-            )}
-          </div>
-          <button
-            onClick={resetGame}
-            className="px-6 py-3 sm:px-8 sm:py-4 rounded-2xl bg-green-400 text-white text-lg sm:text-xl font-bold shadow-lg hover:bg-green-500 transition-colors"
-          >
-            שחק שוב
-          </button>
+      {/* Main content area - fills remaining space */}
+      <div className="flex-1 flex flex-col items-center justify-center w-full gap-4 sm:gap-6">
+        {/* Board */}
+        <div className="grid grid-cols-3 gap-2 sm:gap-3 w-[min(95vw,24rem)]">
+          {board.map((cell, i) => {
+            const isWinCell = winLine?.includes(i);
+            return (
+              <button
+                key={i}
+                onClick={() => handleCellClick(i)}
+                disabled={!!cell || gameOver || locked}
+                className={`aspect-square rounded-2xl text-[14vw] sm:text-8xl font-bold shadow-lg transition-all flex items-center justify-center overflow-hidden leading-none ${
+                  isWinCell
+                    ? result === "win"
+                      ? "bg-green-400 ring-4 ring-green-300 scale-105"
+                      : "bg-red-400 ring-4 ring-red-300 scale-105"
+                    : cell
+                      ? "bg-white"
+                      : "bg-white hover:bg-gray-100 hover:scale-105"
+                } disabled:cursor-default`}
+              >
+                {cell === "X" && (
+                  <span className="text-blue-500">X</span>
+                )}
+                {cell === "O" && (
+                  <span className="text-pink-500">O</span>
+                )}
+              </button>
+            );
+          })}
         </div>
-      )}
 
-      {/* Turn indicator */}
-      {!gameOver && (
-        <p className="text-lg sm:text-xl text-gray-500 font-bold">
-          {locked ? "...תור המחשב" : "!תורך - שים X"}
-        </p>
-      )}
+        {/* Game result */}
+        {gameOver && (
+          <div className="flex flex-col items-center gap-4">
+            <div className="text-3xl sm:text-4xl font-bold">
+              {result === "win" && (
+                <span className="text-green-600">🎉 ניצחת!</span>
+              )}
+              {result === "lose" && (
+                <span className="text-red-500">😢 הפסדת</span>
+              )}
+              {result === "draw" && (
+                <span className="text-gray-600">🤝 תיקו!</span>
+              )}
+            </div>
+            <button
+              onClick={resetGame}
+              className="px-6 py-3 sm:px-8 sm:py-4 rounded-2xl bg-green-400 text-white text-lg sm:text-xl font-bold shadow-lg hover:bg-green-500 transition-colors"
+            >
+              שחק שוב
+            </button>
+          </div>
+        )}
+
+        {/* Turn indicator */}
+        {!gameOver && (
+          <p className="text-lg sm:text-xl text-gray-500 font-bold">
+            {locked ? "...תור המחשב" : "!תורך - שים X"}
+          </p>
+        )}
+      </div>
     </div>
   );
 }

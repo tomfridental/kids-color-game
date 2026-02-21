@@ -200,7 +200,7 @@ function MathGame({ onBack }: { onBack: () => void }) {
       </div>
 
       {/* Level indicators */}
-      <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-6 sm:mb-12 max-w-sm sm:max-w-lg">
+      <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-4 sm:mb-6 max-w-sm sm:max-w-lg">
         {Array.from({ length: LEVELS }, (_, i) => {
           const lvl = i + 1;
           const isActive = lvl === level;
@@ -228,7 +228,7 @@ function MathGame({ onBack }: { onBack: () => void }) {
       </div>
 
       {/* Progress within level */}
-      <div className="flex gap-2 mb-4 sm:mb-8">
+      <div className="flex gap-2 mb-4">
         {Array.from({ length: PROBLEMS_PER_LEVEL }, (_, i) => (
           <div
             key={i}
@@ -239,40 +239,43 @@ function MathGame({ onBack }: { onBack: () => void }) {
         ))}
       </div>
 
-      {/* Problem display */}
-      <div className="bg-white rounded-3xl shadow-lg px-16 py-12 mb-8 sm:mb-12">
-        <p className="text-6xl font-bold text-gray-800 text-center" dir="ltr">
-          {problem.a} {problem.operator} {problem.b} = ?
-        </p>
-      </div>
+      {/* Main content area - fills remaining space */}
+      <div className="flex-1 flex flex-col items-center justify-center w-full max-w-2xl gap-6 sm:gap-8">
+        {/* Problem display */}
+        <div className="bg-white rounded-3xl shadow-lg px-10 py-6 sm:px-16 sm:py-10">
+          <p className="text-5xl sm:text-6xl font-bold text-gray-800 text-center" dir="ltr">
+            {problem.a} {problem.operator} {problem.b} = ?
+          </p>
+        </div>
 
-      {/* Answer options */}
-      <div className="grid grid-cols-2 gap-4 sm:gap-6">
-        {options.map((value, i) => {
-          const color = OPTION_COLORS[i];
-          let extraClass = "";
+        {/* Answer options - single row */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 w-full max-w-lg">
+          {options.map((value, i) => {
+            const color = OPTION_COLORS[i];
+            let extraClass = "";
 
-          if (selectedOption !== null) {
-            if (isCorrect && value === problem.answer) {
-              extraClass = "bg-green-500 hover:bg-green-500 ring-4 ring-green-300 scale-110";
-            } else if (value === selectedOption && !isCorrect) {
-              extraClass = "bg-red-500 hover:bg-red-500 ring-4 ring-red-300 animate-shake";
+            if (selectedOption !== null) {
+              if (isCorrect && value === problem.answer) {
+                extraClass = "bg-green-500 hover:bg-green-500 ring-4 ring-green-300 scale-110";
+              } else if (value === selectedOption && !isCorrect) {
+                extraClass = "bg-red-500 hover:bg-red-500 ring-4 ring-red-300 animate-shake";
+              }
             }
-          }
 
-          return (
-            <button
-              key={i}
-              onClick={() => handleAnswer(value)}
-              disabled={selectedOption !== null}
-              className={`w-36 h-36 rounded-2xl text-white text-5xl font-bold shadow-lg transition-all ${
-                extraClass || `${color.bg} ${color.hover}`
-              } disabled:opacity-80`}
-            >
-              {value}
-            </button>
-          );
-        })}
+            return (
+              <button
+                key={i}
+                onClick={() => handleAnswer(value)}
+                disabled={selectedOption !== null}
+                className={`aspect-square rounded-2xl text-white text-4xl sm:text-5xl font-bold shadow-lg transition-all ${
+                  extraClass || `${color.bg} ${color.hover}`
+                } disabled:opacity-80`}
+              >
+                {value}
+              </button>
+            );
+          })}
+        </div>
       </div>
     </div>
   );

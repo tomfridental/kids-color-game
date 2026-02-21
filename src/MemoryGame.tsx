@@ -218,7 +218,7 @@ function MemoryGame({ onBack }: { onBack: () => void }) {
       </div>
 
       {/* Level indicators */}
-      <div className="flex gap-2 sm:gap-3 mb-4 sm:mb-6">
+      <div className="flex gap-2 sm:gap-3 mb-3 sm:mb-4">
         {LEVELS.map((_, i) => {
           const isActive = i === level;
           const isDone = i < level;
@@ -240,35 +240,38 @@ function MemoryGame({ onBack }: { onBack: () => void }) {
         })}
       </div>
 
-      {/* Moves counter */}
-      <p className="text-lg sm:text-xl text-gray-500 font-bold mb-4 sm:mb-6">
-        מהלכים: {moves}
-      </p>
+      {/* Main content area - fills remaining space */}
+      <div className="flex-1 flex flex-col items-center justify-center w-full gap-3 sm:gap-4">
+        {/* Moves counter */}
+        <p className="text-lg sm:text-xl text-gray-500 font-bold">
+          מהלכים: {moves}
+        </p>
 
-      {/* Card grid */}
-      <div
-        className="grid gap-2 sm:gap-3 w-full"
-        style={{
-          gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))`,
-          maxWidth: `${cols * 9 + (cols - 1) * 0.75}rem`,
-        }}
-      >
-        {cards.map((card) => (
-          <button
-            key={card.id}
-            onClick={() => handleCardClick(card.id)}
-            className={`aspect-square rounded-xl text-4xl sm:text-5xl font-bold shadow-lg transition-all duration-300 flex items-center justify-center ${
-              card.matched
-                ? "bg-green-300 scale-95 opacity-70"
-                : card.flipped
-                  ? "bg-white scale-105"
-                  : "bg-purple-400 hover:bg-purple-500 hover:scale-105"
-            }`}
-            disabled={card.flipped || card.matched || locked}
-          >
-            {card.flipped || card.matched ? card.emoji : "❓"}
-          </button>
-        ))}
+        {/* Card grid */}
+        <div
+          className="grid gap-2 sm:gap-3 w-full"
+          style={{
+            gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))`,
+            maxWidth: `${cols * 7 + (cols - 1) * 0.75}rem`,
+          }}
+        >
+          {cards.map((card) => (
+            <button
+              key={card.id}
+              onClick={() => handleCardClick(card.id)}
+              className={`aspect-square rounded-xl text-3xl sm:text-4xl font-bold shadow-lg transition-all duration-300 flex items-center justify-center ${
+                card.matched
+                  ? "bg-green-300 scale-95 opacity-70"
+                  : card.flipped
+                    ? "bg-white scale-105"
+                    : "bg-purple-400 hover:bg-purple-500 hover:scale-105"
+              }`}
+              disabled={card.flipped || card.matched || locked}
+            >
+              {card.flipped || card.matched ? card.emoji : "❓"}
+            </button>
+          ))}
+        </div>
       </div>
     </div>
   );
