@@ -11,7 +11,7 @@ interface Problem {
 }
 
 function getLevelConfig(level: number) {
-  if (level <= 3) return { maxSum: 5, minAnswer: 0, minOperand: 0, allowSubtract: false };
+  if (level <= 2) return { maxSum: 5, minAnswer: 0, minOperand: 0, allowSubtract: false };
   if (level <= 8) return { maxSum: 10, minAnswer: 0, minOperand: 0, allowSubtract: false };
   if (level <= 15) return { maxSum: 10, minAnswer: 0, minOperand: 0, allowSubtract: true };
   return { maxSum: 20, minAnswer: 11, minOperand: 2, allowSubtract: false };

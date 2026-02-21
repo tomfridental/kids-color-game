@@ -19,7 +19,7 @@ const LEVELS: Word[][] = [
     { emoji: "🏠", word: "בית", en: "house" },
     { emoji: "🐻", word: "דב", en: "bear" },
     { emoji: "🥛", word: "חלב", en: "milk" },
-    { emoji: "🌊", word: "ים", en: "sea" },
+    { emoji: "🌊", word: "גל", en: "wave" },
   ],
   // Level 2: 3-4 letter words
   [
@@ -82,23 +82,23 @@ function shuffle<T>(array: T[]): T[] {
 }
 
 function getLetterChoices(word: string): string[] {
-  const wordLetters = word.split("");
+  const uniqueLetters = [...new Set(word.split(""))];
   const extras = new Set<string>();
 
   // Calculate how many extras we need for an even total (2 clean rows)
-  const minExtras = Math.max(4, wordLetters.length);
-  const total = wordLetters.length + minExtras;
+  const minExtras = Math.max(4, uniqueLetters.length);
+  const total = uniqueLetters.length + minExtras;
   const targetExtras = total % 2 === 0 ? minExtras : minExtras + 1;
 
   while (extras.size < targetExtras) {
     const randomLetter =
       HEBREW_LETTERS[Math.floor(Math.random() * HEBREW_LETTERS.length)];
-    if (!wordLetters.includes(randomLetter)) {
+    if (!uniqueLetters.includes(randomLetter)) {
       extras.add(randomLetter);
     }
   }
 
-  return shuffle([...wordLetters, ...extras]);
+  return shuffle([...uniqueLetters, ...extras]);
 }
 
 function speakEnglish(word: string) {
@@ -168,13 +168,15 @@ function playSound(type: "correct" | "wrong" | "place" | "win") {
   }
 }
 
+const INITIAL_WORDS = pickLevelWords(0);
+
 function HebrewLetters({ onBack }: { onBack: () => void }) {
   const [level, setLevel] = useState(0);
   const [wordIndex, setWordIndex] = useState(0);
-  const [levelWords, setLevelWords] = useState<Word[]>(() => pickLevelWords(0));
+  const [levelWords, setLevelWords] = useState<Word[]>(INITIAL_WORDS);
   const [filled, setFilled] = useState<string[]>([]);
   const [choices, setChoices] = useState<string[]>(() =>
-    getLetterChoices(pickLevelWords(0)[0].word)
+    getLetterChoices(INITIAL_WORDS[0].word)
   );
   const [shakeWrong, setShakeWrong] = useState(false);
   const [wordComplete, setWordComplete] = useState(false);
