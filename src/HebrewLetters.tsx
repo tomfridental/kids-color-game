@@ -6,6 +6,8 @@ interface Word {
   en: string;
 }
 
+const WORDS_PER_LEVEL = 5;
+
 const LEVELS: Word[][] = [
   // Level 1: 2-3 letter words
   [
@@ -15,6 +17,9 @@ const LEVELS: Word[][] = [
     { emoji: "🌈", word: "קשת", en: "rainbow" },
     { emoji: "🐘", word: "פיל", en: "elephant" },
     { emoji: "🏠", word: "בית", en: "house" },
+    { emoji: "🐻", word: "דב", en: "bear" },
+    { emoji: "🥛", word: "חלב", en: "milk" },
+    { emoji: "🌊", word: "ים", en: "sea" },
   ],
   // Level 2: 3-4 letter words
   [
@@ -24,6 +29,9 @@ const LEVELS: Word[][] = [
     { emoji: "☀️", word: "שמש", en: "sun" },
     { emoji: "🍎", word: "תפוח", en: "apple" },
     { emoji: "🐴", word: "סוס", en: "horse" },
+    { emoji: "🐑", word: "כבש", en: "sheep" },
+    { emoji: "🍞", word: "לחם", en: "bread" },
+    { emoji: "🌍", word: "עולם", en: "world" },
   ],
   // Level 3: 4 letter words
   [
@@ -32,6 +40,9 @@ const LEVELS: Word[][] = [
     { emoji: "⭐", word: "כוכב", en: "star" },
     { emoji: "🐱", word: "חתול", en: "cat" },
     { emoji: "🎈", word: "בלון", en: "balloon" },
+    { emoji: "🍇", word: "ענבים", en: "grapes" },
+    { emoji: "🐸", word: "צפרדע", en: "frog" },
+    { emoji: "🎵", word: "שיר", en: "song" },
   ],
   // Level 4: 4-5 letter words
   [
@@ -40,16 +51,24 @@ const LEVELS: Word[][] = [
     { emoji: "🦁", word: "אריה", en: "lion" },
     { emoji: "🎂", word: "עוגה", en: "cake" },
     { emoji: "🔴", word: "אדום", en: "red" },
+    { emoji: "🎒", word: "תיק", en: "bag" },
+    { emoji: "🪑", word: "כיסא", en: "chair" },
   ],
-  // Level 5: mixed
+  // Level 5: long words
   [
     { emoji: "🚗", word: "מכונית", en: "car" },
     { emoji: "✈️", word: "מטוס", en: "airplane" },
     { emoji: "🍦", word: "גלידה", en: "ice cream" },
     { emoji: "🐓", word: "תרנגול", en: "rooster" },
     { emoji: "🌻", word: "חמנייה", en: "sunflower" },
+    { emoji: "🍫", word: "שוקולד", en: "chocolate" },
+    { emoji: "🖥️", word: "מחשב", en: "computer" },
   ],
 ];
+
+function pickLevelWords(level: number): Word[] {
+  return shuffle(LEVELS[level]).slice(0, WORDS_PER_LEVEL);
+}
 
 const HEBREW_LETTERS = "אבגדהוזחטיכלמנסעפצקרשת";
 
@@ -152,24 +171,36 @@ function playSound(type: "correct" | "wrong" | "place" | "win") {
 function HebrewLetters({ onBack }: { onBack: () => void }) {
   const [level, setLevel] = useState(0);
   const [wordIndex, setWordIndex] = useState(0);
+  const [levelWords, setLevelWords] = useState<Word[]>(() => pickLevelWords(0));
   const [filled, setFilled] = useState<string[]>([]);
   const [choices, setChoices] = useState<string[]>(() =>
-    getLetterChoices(LEVELS[0][0].word)
+    getLetterChoices(pickLevelWords(0)[0].word)
   );
   const [shakeWrong, setShakeWrong] = useState(false);
   const [wordComplete, setWordComplete] = useState(false);
   const [completed, setCompleted] = useState(false);
 
-  const currentWord = LEVELS[level][wordIndex];
+  const currentWord = levelWords[wordIndex];
   const letters = currentWord.word.split("");
 
-  const nextWord = useCallback((lvl: number, idx: number) => {
-    const w = LEVELS[lvl][idx];
+  const startLevel = useCallback((lvl: number) => {
+    const words = pickLevelWords(lvl);
+    setLevelWords(words);
     setFilled([]);
-    setChoices(getLetterChoices(w.word));
+    setChoices(getLetterChoices(words[0].word));
     setShakeWrong(false);
     setWordComplete(false);
   }, []);
+
+  const nextWord = useCallback(
+    (_lvl: number, idx: number) => {
+      setFilled([]);
+      setChoices(getLetterChoices(levelWords[idx].word));
+      setShakeWrong(false);
+      setWordComplete(false);
+    },
+    [levelWords]
+  );
 
   const handleLetterClick = useCallback(
     (letter: string) => {
@@ -190,7 +221,7 @@ function HebrewLetters({ onBack }: { onBack: () => void }) {
 
           setTimeout(() => {
             const nextIdx = wordIndex + 1;
-            if (nextIdx >= LEVELS[level].length) {
+            if (nextIdx >= WORDS_PER_LEVEL) {
               // Level complete
               const nextLvl = level + 1;
               if (nextLvl >= LEVELS.length) {
@@ -198,7 +229,7 @@ function HebrewLetters({ onBack }: { onBack: () => void }) {
               } else {
                 setLevel(nextLvl);
                 setWordIndex(0);
-                nextWord(nextLvl, 0);
+                startLevel(nextLvl);
               }
             } else {
               setWordIndex(nextIdx);
@@ -212,7 +243,7 @@ function HebrewLetters({ onBack }: { onBack: () => void }) {
         setTimeout(() => setShakeWrong(false), 500);
       }
     },
-    [filled, letters, wordComplete, wordIndex, level, nextWord]
+    [filled, letters, wordComplete, wordIndex, level, nextWord, startLevel]
   );
 
   if (completed) {
@@ -228,7 +259,7 @@ function HebrewLetters({ onBack }: { onBack: () => void }) {
             setLevel(0);
             setWordIndex(0);
             setCompleted(false);
-            nextWord(0, 0);
+            startLevel(0);
           }}
           className="px-6 py-3 sm:px-8 sm:py-4 rounded-2xl bg-blue-400 text-white text-lg sm:text-xl font-bold shadow-lg hover:bg-blue-500 transition-colors"
         >
@@ -315,9 +346,7 @@ function HebrewLetters({ onBack }: { onBack: () => void }) {
 
         {/* Letter blanks */}
         <div
-          className={`flex gap-3 sm:gap-4 ${
-            shakeWrong ? "animate-shake" : ""
-          }`}
+          className={`flex gap-3 sm:gap-4 ${shakeWrong ? "animate-shake" : ""}`}
           dir="rtl"
         >
           {letters.map((_, i) => {

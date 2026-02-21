@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import MathGame from "./Math";
 import ColorGame from "./ColorGame";
 import TicTacToe from "./TicTacToe";
@@ -7,27 +7,45 @@ import HebrewLetters from "./HebrewLetters";
 
 type Screen = "home" | "math" | "color" | "tictactoe" | "memory" | "letters";
 
+const SCREENS = new Set<string>(["home", "math", "color", "tictactoe", "memory", "letters"]);
+
+function getScreenFromHash(): Screen {
+  const hash = window.location.hash.replace("#", "").split("/")[0];
+  return SCREENS.has(hash) ? (hash as Screen) : "home";
+}
+
 function App() {
-  const [screen, setScreen] = useState<Screen>("home");
+  const [screen, setScreen] = useState<Screen>(getScreenFromHash);
+
+  const navigate = useCallback((s: Screen) => {
+    window.location.hash = s === "home" ? "" : s;
+    setScreen(s);
+  }, []);
+
+  useEffect(() => {
+    const onHashChange = () => setScreen(getScreenFromHash());
+    window.addEventListener("hashchange", onHashChange);
+    return () => window.removeEventListener("hashchange", onHashChange);
+  }, []);
 
   if (screen === "math") {
-    return <MathGame onBack={() => setScreen("home")} />;
+    return <MathGame onBack={() => navigate("home")} />;
   }
 
   if (screen === "color") {
-    return <ColorGame onBack={() => setScreen("home")} />;
+    return <ColorGame onBack={() => navigate("home")} />;
   }
 
   if (screen === "tictactoe") {
-    return <TicTacToe onBack={() => setScreen("home")} />;
+    return <TicTacToe onBack={() => navigate("home")} />;
   }
 
   if (screen === "memory") {
-    return <MemoryGame onBack={() => setScreen("home")} />;
+    return <MemoryGame onBack={() => navigate("home")} />;
   }
 
   if (screen === "letters") {
-    return <HebrewLetters onBack={() => setScreen("home")} />;
+    return <HebrewLetters onBack={() => navigate("home")} />;
   }
 
   return (
@@ -35,35 +53,35 @@ function App() {
       <img src="/logo.svg" alt="משחקי ילדים" className="w-64 sm:w-96 mb-6 sm:mb-10" />
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 sm:gap-8 w-full max-w-md sm:max-w-2xl">
         <button
-          onClick={() => setScreen("math")}
+          onClick={() => navigate("math")}
           className="aspect-square rounded-2xl bg-blue-400 text-white text-xl sm:text-2xl font-bold shadow-lg hover:bg-blue-500 transition-colors flex flex-col items-center justify-center gap-2"
         >
           <span className="text-5xl sm:text-6xl opacity-90">➕</span>
           <span>חשבון</span>
         </button>
         <button
-          onClick={() => setScreen("color")}
+          onClick={() => navigate("color")}
           className="aspect-square rounded-2xl bg-pink-400 text-white text-xl sm:text-2xl font-bold shadow-lg hover:bg-pink-500 transition-colors flex flex-col items-center justify-center gap-2"
         >
           <span className="text-5xl sm:text-6xl opacity-90">🎨</span>
           <span>צבעים</span>
         </button>
         <button
-          onClick={() => setScreen("tictactoe")}
+          onClick={() => navigate("tictactoe")}
           className="aspect-square rounded-2xl bg-green-400 text-white text-xl sm:text-2xl font-bold shadow-lg hover:bg-green-500 transition-colors flex flex-col items-center justify-center gap-2"
         >
           <span className="text-5xl sm:text-6xl opacity-90">❌⭕</span>
           <span>איקס עיגול</span>
         </button>
         <button
-          onClick={() => setScreen("memory")}
+          onClick={() => navigate("memory")}
           className="aspect-square rounded-2xl bg-purple-400 text-white text-xl sm:text-2xl font-bold shadow-lg hover:bg-purple-500 transition-colors flex flex-col items-center justify-center gap-2"
         >
           <span className="text-5xl sm:text-6xl opacity-90">🧠</span>
           <span>זיכרון</span>
         </button>
         <button
-          onClick={() => setScreen("letters")}
+          onClick={() => navigate("letters")}
           className="aspect-square rounded-2xl bg-orange-400 text-white text-xl sm:text-2xl font-bold shadow-lg hover:bg-orange-500 transition-colors flex flex-col items-center justify-center gap-2"
         >
           <span className="text-5xl sm:text-6xl opacity-90">🔤</span>
