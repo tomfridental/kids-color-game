@@ -107,10 +107,9 @@ function MathGame({ onBack }: { onBack: () => void }) {
   const [level, setLevel] = useState(1);
   const [correctCount, setCorrectCount] = useState(0);
   const [problem, setProblem] = useState<Problem>(() => generateProblem(1));
-  const [options, setOptions] = useState<number[]>(() => {
-    const p = generateProblem(1);
-    return generateOptions(p.answer, getMaxSum(1));
-  });
+  const [options, setOptions] = useState<number[]>(() =>
+    generateOptions(problem.answer, getMaxSum(1))
+  );
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
   const [completed, setCompleted] = useState(false);

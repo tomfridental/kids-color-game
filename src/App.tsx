@@ -32,9 +32,7 @@ function App() {
 
   return (
     <div className="flex flex-col items-center bg-gray-200 px-4 pt-2 pb-4 sm:p-8 justify-center" style={{ height: "100dvh" }}>
-      <h1 className="text-3xl sm:text-5xl font-bold text-gray-700 mb-6 sm:mb-20">
-        משחקי פרידנטל
-      </h1>
+      <img src="/logo.svg" alt="משחקי ילדים" className="w-64 sm:w-96 mb-6 sm:mb-20" />
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 sm:gap-8 w-full max-w-md sm:max-w-2xl">
         <button
           onClick={() => setScreen("math")}
