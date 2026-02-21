@@ -32,12 +32,12 @@ function getComputerMove(board: Board): number {
     .map((cell, i) => (cell === null ? i : -1))
     .filter((i) => i !== -1);
 
-  // 70% of the time, just pick a random spot
-  if (Math.random() < 0.7) {
+  // 25% of the time, just pick a random spot
+  if (Math.random() < 0.25) {
     return available[Math.floor(Math.random() * available.length)];
   }
 
-  // 30% of the time, play smart: block player win or take a win
+  // 75% of the time, play smart: block player win or take a win
   for (const [a, b, c] of WINNING_LINES) {
     const cells = [board[a], board[b], board[c]];
     if (cells.filter((c) => c === "O").length === 2 && cells.includes(null)) {
