@@ -255,7 +255,7 @@ function MathGame({ onBack }: { onBack: () => void }) {
       </div>
 
       {/* Main content area - fills remaining space */}
-      <div className="flex-1 flex flex-col items-center justify-around w-full max-w-2xl gap-6 sm:gap-8">
+      <div className="flex-1 flex flex-col items-center justify-center w-full max-w-2xl gap-6 sm:gap-8">
         {/* Problem display */}
         <div className="bg-white rounded-3xl shadow-lg px-10 py-6 sm:px-16 sm:py-10">
           <p
@@ -267,7 +267,7 @@ function MathGame({ onBack }: { onBack: () => void }) {
         </div>
 
         {/* Answer options - single row */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 w-full max-w-lg">
+        <div className="grid grid-cols-2 gap-3 sm:gap-4 w-full max-w-xs sm:max-w-lg">
           {options.map((value, i) => {
             const color = OPTION_COLORS[i];
             let extraClass = "";
@@ -287,7 +287,7 @@ function MathGame({ onBack }: { onBack: () => void }) {
                 key={i}
                 onClick={() => handleAnswer(value)}
                 disabled={selectedOption !== null}
-                className={`aspect-square rounded-2xl text-white text-4xl sm:text-5xl font-bold shadow-lg transition-all ${
+                className={`aspect-square rounded-2xl text-white text-3xl sm:text-5xl font-bold shadow-lg transition-all ${
                   extraClass || `${color.bg} ${color.hover}`
                 } disabled:opacity-80`}
               >

@@ -249,7 +249,7 @@ function ColorGame({ onBack }: { onBack: () => void }) {
         </button>
 
         {/* Color options - single row */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 w-full max-w-lg">
+        <div className="grid grid-cols-2 gap-3 sm:gap-4 w-full max-w-xs sm:max-w-lg">
           {round.options.map((color, i) => {
             let extraClass = "";
 
