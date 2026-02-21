@@ -11,28 +11,35 @@ interface Problem {
 }
 
 function getLevelConfig(level: number) {
-  if (level <= 2) return { maxSum: 5, minAnswer: 0, minOperand: 0, allowSubtract: false };
-  if (level <= 8) return { maxSum: 10, minAnswer: 0, minOperand: 0, allowSubtract: false };
-  if (level <= 15) return { maxSum: 10, minAnswer: 0, minOperand: 0, allowSubtract: true };
+  if (level <= 2)
+    return { maxSum: 5, minAnswer: 0, minOperand: 0, allowSubtract: false };
+  if (level <= 8)
+    return { maxSum: 10, minAnswer: 0, minOperand: 0, allowSubtract: false };
+  if (level <= 15)
+    return { maxSum: 10, minAnswer: 0, minOperand: 0, allowSubtract: true };
   return { maxSum: 20, minAnswer: 11, minOperand: 2, allowSubtract: false };
 }
 
 function generateProblem(level: number): Problem {
-  const { maxSum, minAnswer, minOperand, allowSubtract } = getLevelConfig(level);
+  const { maxSum, minAnswer, minOperand, allowSubtract } =
+    getLevelConfig(level);
   const operator = allowSubtract && Math.random() < 0.5 ? "-" : "+";
 
   // 95% chance to use at least 1 (rarely allows 0)
-  const effectiveMin = minOperand === 0 && Math.random() < 0.95 ? 1 : minOperand;
+  const effectiveMin =
+    minOperand === 0 && Math.random() < 0.95 ? 1 : minOperand;
 
   if (operator === "+") {
-    const a = effectiveMin + Math.floor(Math.random() * (maxSum - effectiveMin + 1));
+    const a =
+      effectiveMin + Math.floor(Math.random() * (maxSum - effectiveMin + 1));
     const bMin = Math.max(effectiveMin, minAnswer - a);
     const bMax = maxSum - a;
     if (bMin > bMax) return generateProblem(level);
     const b = bMin + Math.floor(Math.random() * (bMax - bMin + 1));
     return { a, b, operator, answer: a + b };
   } else {
-    const a = effectiveMin + Math.floor(Math.random() * (maxSum - effectiveMin + 1));
+    const a =
+      effectiveMin + Math.floor(Math.random() * (maxSum - effectiveMin + 1));
     const b = effectiveMin + Math.floor(Math.random() * (a - effectiveMin + 1));
     return { a, b, operator, answer: a - b };
   }
@@ -44,9 +51,7 @@ function generateOptions(correctAnswer: number, maxSum: number): number[] {
   while (options.size < 4) {
     const offset = Math.floor(Math.random() * 5) + 1;
     const wrong =
-      Math.random() < 0.5
-        ? correctAnswer + offset
-        : correctAnswer - offset;
+      Math.random() < 0.5 ? correctAnswer + offset : correctAnswer - offset;
 
     if (wrong >= 0 && wrong <= maxSum) {
       options.add(wrong);
@@ -84,7 +89,10 @@ function playSound(type: "correct" | "wrong") {
   } else {
     oscillator.type = "triangle";
     oscillator.frequency.setValueAtTime(350, ctx.currentTime);
-    oscillator.frequency.exponentialRampToValueAtTime(180, ctx.currentTime + 0.3);
+    oscillator.frequency.exponentialRampToValueAtTime(
+      180,
+      ctx.currentTime + 0.3
+    );
     gain.gain.setValueAtTime(0.25, ctx.currentTime);
     gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.35);
     oscillator.start();
@@ -163,7 +171,9 @@ function MathGame({ onBack }: { onBack: () => void }) {
     return (
       <div className="h-dvh overflow-hidden flex flex-col items-center justify-center bg-gray-200 gap-6 sm:gap-8 p-4">
         <div className="text-5xl sm:text-6xl">🎉</div>
-        <h1 className="text-3xl sm:text-4xl font-bold text-green-600">!כל הכבוד</h1>
+        <h1 className="text-3xl sm:text-4xl font-bold text-green-600">
+          !כל הכבוד
+        </h1>
         <p className="text-xl sm:text-2xl text-gray-600">סיימת את כל השלבים</p>
         <button
           onClick={() => {
@@ -187,7 +197,10 @@ function MathGame({ onBack }: { onBack: () => void }) {
   }
 
   return (
-    <div className="h-dvh overflow-hidden flex flex-col items-center bg-gray-200 p-4 sm:p-8" dir="rtl">
+    <div
+      className="h-dvh overflow-hidden flex flex-col items-center bg-gray-200 p-4 sm:p-8"
+      dir="rtl"
+    >
       {/* Header */}
       <div className="w-full max-w-lg relative flex items-center justify-center mb-4 sm:mb-8">
         <button
@@ -196,7 +209,9 @@ function MathGame({ onBack }: { onBack: () => void }) {
         >
           → חזרה
         </button>
-        <h1 className="text-xl sm:text-2xl font-bold text-gray-700">משחק חשבון</h1>
+        <h1 className="text-xl sm:text-2xl font-bold text-gray-700">
+          משחק חשבון
+        </h1>
       </div>
 
       {/* Level indicators */}
@@ -217,8 +232,8 @@ function MathGame({ onBack }: { onBack: () => void }) {
                 isDone
                   ? "bg-green-400 text-white hover:bg-green-500"
                   : isActive
-                    ? "bg-blue-400 text-white scale-110"
-                    : "bg-gray-300 text-gray-500 hover:bg-gray-400 hover:text-white"
+                  ? "bg-blue-400 text-white scale-110"
+                  : "bg-gray-300 text-gray-500 hover:bg-gray-400 hover:text-white"
               }`}
             >
               {lvl}
@@ -240,10 +255,13 @@ function MathGame({ onBack }: { onBack: () => void }) {
       </div>
 
       {/* Main content area - fills remaining space */}
-      <div className="flex-1 flex flex-col items-center justify-center w-full max-w-2xl gap-6 sm:gap-8">
+      <div className="flex-1 flex flex-col items-center justify-around w-full max-w-2xl gap-6 sm:gap-8">
         {/* Problem display */}
         <div className="bg-white rounded-3xl shadow-lg px-10 py-6 sm:px-16 sm:py-10">
-          <p className="text-5xl sm:text-6xl font-bold text-gray-800 text-center" dir="ltr">
+          <p
+            className="text-5xl sm:text-6xl font-bold text-gray-800 text-center"
+            dir="ltr"
+          >
             {problem.a} {problem.operator} {problem.b} = ?
           </p>
         </div>
@@ -256,9 +274,11 @@ function MathGame({ onBack }: { onBack: () => void }) {
 
             if (selectedOption !== null) {
               if (isCorrect && value === problem.answer) {
-                extraClass = "bg-green-500 hover:bg-green-500 ring-4 ring-green-300 scale-110";
+                extraClass =
+                  "bg-green-500 hover:bg-green-500 ring-4 ring-green-300 scale-110";
               } else if (value === selectedOption && !isCorrect) {
-                extraClass = "bg-red-500 hover:bg-red-500 ring-4 ring-red-300 animate-shake";
+                extraClass =
+                  "bg-red-500 hover:bg-red-500 ring-4 ring-red-300 animate-shake";
               }
             }
 

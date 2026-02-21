@@ -279,11 +279,11 @@ function HebrewLetters({ onBack }: { onBack: () => void }) {
 
   return (
     <div
-      className="h-dvh overflow-hidden flex flex-col items-center bg-gray-200 p-4 sm:p-8"
+      className="h-dvh overflow-hidden flex flex-col items-center bg-gray-200 p-4 sm:p-6"
       dir="rtl"
     >
       {/* Header */}
-      <div className="w-full max-w-lg relative flex items-center justify-center mb-4 sm:mb-8">
+      <div className="w-full max-w-lg relative flex items-center justify-center mb-3 sm:mb-4">
         <button
           onClick={onBack}
           className="absolute right-0 px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl bg-gray-400 text-white text-sm sm:text-base font-bold shadow hover:bg-gray-500 transition-colors"
@@ -294,7 +294,7 @@ function HebrewLetters({ onBack }: { onBack: () => void }) {
       </div>
 
       {/* Level indicators */}
-      <div className="flex gap-2 sm:gap-3 mb-4 sm:mb-6">
+      <div className="flex gap-1.5 sm:gap-2 mb-3 sm:mb-4">
         {LEVELS.map((_, i) => {
           const isActive = i === level;
           const isDone = i < level;
@@ -321,7 +321,7 @@ function HebrewLetters({ onBack }: { onBack: () => void }) {
       </div>
 
       {/* Progress dots */}
-      <div className="flex gap-2 mb-4">
+      <div className="flex gap-2 mb-2">
         {LEVELS[level].map((_, i) => (
           <div
             key={i}
@@ -337,7 +337,7 @@ function HebrewLetters({ onBack }: { onBack: () => void }) {
       </div>
 
       {/* Main content area - fills remaining space */}
-      <div className="flex-1 flex flex-col items-center justify-center w-full gap-4 sm:gap-6">
+      <div className="flex-1 min-h-0 flex flex-col items-center justify-center w-full gap-3 sm:gap-4">
         {/* Emoji image — easter egg: tap to hear in English */}
         <button
           onClick={() => speakEnglish(currentWord.en)}
@@ -348,7 +348,7 @@ function HebrewLetters({ onBack }: { onBack: () => void }) {
 
         {/* Letter blanks */}
         <div
-          className={`flex gap-3 sm:gap-4 ${shakeWrong ? "animate-shake" : ""}`}
+          className={`flex gap-3 sm:gap-4 mb-10 ${shakeWrong ? "animate-shake" : ""}`}
           dir="rtl"
         >
           {letters.map((_, i) => {
