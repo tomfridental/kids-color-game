@@ -24,6 +24,19 @@ const EASY_WORDS: WordDef[] = [
   { word: "Apple", emoji: "🍎" },
   { word: "Baby", emoji: "👶" },
   { word: "Hand", emoji: "✋" },
+  { word: "Pig", emoji: "🐷" },
+  { word: "Milk", emoji: "🥛" },
+  { word: "Cereals", emoji: "🥣" },
+  { word: "Cookie", emoji: "🍪" },
+  { word: "Ice Cream", emoji: "🍦" },
+  { word: "Elephant", emoji: "🐘" },
+  { word: "TV", emoji: "📺" },
+  { word: "Pancake", emoji: "🥞" },
+  { word: "Ear", emoji: "👂" },
+  { word: "Shoulders", emoji: "🤷" },
+  { word: "Chair", emoji: "💺" },
+  { word: "Food", emoji: "🍽️" },
+  { word: "Water", emoji: "💧" },
 ];
 
 const MEDIUM_WORDS: WordDef[] = [
@@ -40,7 +53,6 @@ const MEDIUM_WORDS: WordDef[] = [
   { word: "Pizza", emoji: "🍕" },
   { word: "Mouse", emoji: "🐭" },
   { word: "Snow", emoji: "❄️" },
-  { word: "King", emoji: "👑" },
   { word: "Guitar", emoji: "🎸" },
 ];
 
